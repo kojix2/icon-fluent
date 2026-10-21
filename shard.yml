@@ -1,0 +1,7 @@
+name: icon-fluent
+version: 0.1.0
+license: MIT
+
+dependencies:
+  crimage:
+    github: naqvis/crimage

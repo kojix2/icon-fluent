@@ -1,0 +1,6 @@
+/.local-test/
+/.build/
+/lib/
+/bin/
+/.shards/
+*.lock
