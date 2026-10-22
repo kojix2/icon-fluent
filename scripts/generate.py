@@ -114,7 +114,9 @@ def generated_files(archive):
         png = rasterize(svg, path, size)
         groups.setdefault(f"{size}_{style}.tsv", []).append(
             f"{identifier}\t{base64.b64encode(png).decode()}\n")
-    return {name: "".join(rows) for name, rows in groups.items()}, len(icons)
+    files = {name: "".join(rows) for name, rows in groups.items()}
+    files["groups.txt"] = "".join(f"{name.removesuffix('.tsv')}\n" for name in sorted(groups))
+    return files, len(icons)
 
 
 def generate(archive, output_dir, check=False):
