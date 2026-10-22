@@ -1,19 +1,15 @@
 #!/usr/bin/env python3
-"""Generate Crystal CrImage constants from the pinned Fluent UI icon archive."""
+"""Generate Crystal CrImage constants from a Fluent UI icon ZIP."""
 
 import argparse
 import base64
 import ctypes as c
 from ctypes.util import find_library
-import hashlib
 from pathlib import Path
 import re
 import zipfile
 
 
-SOURCE_COMMIT = "4c94ad5f4081168c0d45bdc368f230ecb757cd09"
-SOURCE_SHA256 = "08ae591157365d88b28a966032ef4d0c47e6cc1704479673d410c2e01bd62704"
-SOURCE_URL = f"https://github.com/microsoft/fluentui-system-icons/archive/{SOURCE_COMMIT}.zip"
 SVG = re.compile(
     r"[^/]+/assets/[^/]+/(?:(?P<locale>[^/]+)/)?SVG/"
     r"ic_fluent_(?P<name>[a-z0-9_]+)_(?P<size>\d+)_"
@@ -118,9 +114,7 @@ def generated_files(archive):
         key = f"{size}_{style}"
         groups.setdefault(key, []).append((size, identifier, path, svg))
 
-    header = ("# Generated from microsoft/fluentui-system-icons (MIT). Do not edit manually.\n"
-              f"# Upstream commit: {SOURCE_COMMIT}\n"
-              f"# Source archive SHA-256: {SOURCE_SHA256}\n")
+    header = "# Generated from microsoft/fluentui-system-icons (MIT). Do not edit manually.\n"
     common = (header + 'require "base64"\nrequire "crimage"\n\n'
               'module Icon\n  module Fluent\n'
               '    # Shared CrImage images. Copy before modifying.\n'
@@ -143,9 +137,6 @@ def generated_files(archive):
 
 
 def generate(archive, output_dir, check=False):
-    digest = hashlib.sha256(archive.read_bytes()).hexdigest()
-    if digest != SOURCE_SHA256:
-        raise ValueError(f"Source archive SHA-256 mismatch: {digest}; expected {SOURCE_SHA256}")
     results, count = generated_files(archive)
     existing = {path.relative_to(output_dir) for path in output_dir.glob("[0-9]*_*.cr")}
     expected = {path for path in results if path.name[0].isdigit()}
@@ -175,7 +166,7 @@ def generate(archive, output_dir, check=False):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("archive", type=Path, help=f"Source ZIP from {SOURCE_URL}")
+    parser.add_argument("archive", type=Path, help="Source ZIP from https://github.com/microsoft/fluentui-system-icons")
     parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parents[1] / "src")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()

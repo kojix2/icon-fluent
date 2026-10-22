@@ -1,6 +1,4 @@
 # Generated from microsoft/fluentui-system-icons (MIT). Do not edit manually.
-# Upstream commit: 4c94ad5f4081168c0d45bdc368f230ecb757cd09
-# Source archive SHA-256: 08ae591157365d88b28a966032ef4d0c47e6cc1704479673d410c2e01bd62704
 require "./10_filled"
 require "./10_regular"
 require "./12_filled"
