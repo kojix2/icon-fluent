@@ -1,15 +1,7 @@
-# Generated from microsoft/fluentui-system-icons (MIT). Do not edit manually.
 require "./common"
 
 module Icon
   module Fluent
-    # Presence Available/SVG/ic_fluent_presence_available_10_filled.svg (10x10)
-    PresenceAvailable10Filled = decode_png("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAA2UlEQVQYlX2QsUoDYRCEv90fr98DQbufewMxrY8QLCUPcYU+g6CVlU1aixRWYvpUdtEXsPmL9GGbNIFjbf6TENCBLWZ2mGFXqMg5X4vILTCp0hp4KqUsARJA13WPwDOQgaZOBmZm1rj7SmrSG/9ARKZa646xB3pgU/mdApcHhhdgFxE3EbEBzgAiYqJHFe+q2gEhIq/AybhT4HMkEbEYhuGhmpoDfZ3MbAvMqpZE5GL8xm+aap/c/dvMGuDqj6PvSynzBODuq7Ztv0TkHDgF9hHxoap9KWUO8AM3FUNLhkdaZQAAAABJRU5ErkJggg==")
-    # Presence Away/SVG/ic_fluent_presence_away_10_filled.svg (10x10)
-    PresenceAway10Filled = decode_png("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAyUlEQVQYlXWPMU4DQQxFn73S9rMSBd3sXIG03ICIAilSuEMKOAMFFRVNLkDaCPpUdIELpPEewTUpTDOg1RKe5MLf3/6yUMk5X4vIHTCr0h54MrM3gAaglPIIPAMZaGtlYJlSat19J/XS9udyRGxEZMkIEZlrjftlGIZb/nKvwMWJwXHcRMRMp45Syk1ELKZmBT4m2y+q2gCbkbaXvu/nwOuJ+PEzV427H1JKLXD5j+/BzNYNgLvvuq77FJFz4Az4ioh3VV2Z2RrgG3yePpNsWRiZAAAAAElFTkSuQmCC")
-    # Presence Busy/SVG/ic_fluent_presence_busy_10_filled.svg (10x10)
-    PresenceBusy10Filled = decode_png("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAoklEQVQYlY3MIQ7CUBCE4X+3Sf02QdS99ArUcgSC5hAI7oBAVWF6CxI8CgdcALNXWI15mIekZZI1m29GKEkpbURkD/TldQcGd78AVABd1x2BE5CAulwCtmZWR8RVytKZiYjIujKzsbSnYKvAcgoB5Jx7nUNfq8Djj8WHAsMcVNWhioiXmdXA6oc7uPtYAUTEtWmap4i0wAJ455xvqrpz9xHgAzhpLdmNbOumAAAAAElFTkSuQmCC")
-    # Presence DND/SVG/ic_fluent_presence_dnd_10_filled.svg (10x10)
-    PresenceDnd10Filled = decode_png("iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAABmJLR0QA/wD/AP+gvaeTAAAAx0lEQVQYlX2OMUoEYQyFv2SGaeUf2GK7n7mC2wpeQKy9gc0WewcLq6kEmVsI9lvZrV7AJkcwWInFZJusheg8CCQv7+VFSNRar0VkB2ySOgCjmT0DNADDMNwDD0AFuqwK3JRSOnffS156YgEictWUUqZ0LwnXLXB+IiLiUVU/czyLiNvkN+0v89c8zx/ZdyLys2iBV+AyI3Z/RUfEQYFx6T8AVR0bd38vpXTAxT+6OzObGgB33/d9/yYia2AFfEfEi6puzWwCOAKayDp9MSvHYgAAAABJRU5ErkJggg==")
+    load_icons("10_filled")
   end
 end

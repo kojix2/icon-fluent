@@ -108,66 +108,37 @@ def collect_icons(archive):
 
 
 def generated_files(archive):
-    icons = collect_icons(archive)
     groups = {}
+    icons = collect_icons(archive)
     for size, style, identifier, path, svg in icons:
-        key = f"{size}_{style}"
-        groups.setdefault(key, []).append((size, identifier, path, svg))
-
-    header = "# Generated from microsoft/fluentui-system-icons (MIT). Do not edit manually.\n"
-    common = (header + 'require "base64"\nrequire "crimage"\n\n'
-              'module Icon\n  module Fluent\n'
-              '    # Shared CrImage images. Copy before modifying.\n'
-              '    private def self.decode_png(encoded : String)\n'
-              '      CrImage.read(IO::Memory.new(Base64.decode(encoded)))\n'
-              '    end\n  end\nend\n')
-    results = {Path("common.cr"): common}
-    for key, entries in sorted(groups.items()):
-        lines = [header.rstrip(), 'require "./common"', '', 'module Icon', '  module Fluent']
-        for size, identifier, path, svg in entries:
-            png = rasterize(svg, path, size)
-            lines.append(f"    # {path.split('/assets/', 1)[1]} ({size}x{size})")
-            lines.append(f'    {identifier} = decode_png("{base64.b64encode(png).decode()}")')
-        lines += ['  end', 'end', '']
-        results[Path(f"{key}.cr")] = "\n".join(lines)
-        print(f"Rendered {key}: {len(entries)} icons", flush=True)
-    results[Path("icon-fluent.cr")] = header + "".join(
-        f'require "./{key}"\n' for key in sorted(groups))
-    return results, len(icons)
+        png = rasterize(svg, path, size)
+        groups.setdefault(f"{size}_{style}.tsv", []).append(
+            f"{identifier}\t{base64.b64encode(png).decode()}\n")
+    return {name: "".join(rows) for name, rows in groups.items()}, len(icons)
 
 
 def generate(archive, output_dir, check=False):
-    results, count = generated_files(archive)
-    existing = {path.relative_to(output_dir) for path in output_dir.glob("[0-9]*_*.cr")}
-    expected = {path for path in results if path.name[0].isdigit()}
-    stale = existing - expected
-    if (output_dir / "fluent.cr").is_file():
-        stale.add(Path("fluent.cr"))
-    root_dir = output_dir.parent
-    stale_wrappers = {path.relative_to(root_dir) for path in root_dir.glob("[0-9]*_*.cr")}
-    if (root_dir / "fluent.cr").is_file():
-        stale_wrappers.add(Path("fluent.cr"))
+    files, count = generated_files(archive)
+    stale = {path.name for path in output_dir.glob("*.tsv") if path.name not in files}
     if check:
-        mismatched = [str(path) for path, content in results.items()
-                      if not (output_dir / path).is_file() or (output_dir / path).read_text() != content]
-        if mismatched or stale or stale_wrappers:
-            raise ValueError(f"Generated files differ: {mismatched}; stale files: {sorted(map(str, stale | stale_wrappers))}")
-        print(f"OK: {count} icons, generated files match")
+        mismatched = [name for name, content in files.items()
+                      if not (output_dir / name).is_file() or (output_dir / name).read_text() != content]
+        if mismatched or stale:
+            raise ValueError(f"Generated files differ: {mismatched}; stale files: {sorted(stale)}")
+        print(f"OK: {count} icons, data files match")
     else:
         output_dir.mkdir(parents=True, exist_ok=True)
-        for path in stale:
-            (output_dir / path).unlink()
-        for path in stale_wrappers:
-            (root_dir / path).unlink()
-        for path, content in results.items():
-            (output_dir / path).write_text(content)
-        print(f"Generated {count} icons in {len(results)} source files")
+        for name in stale:
+            (output_dir / name).unlink()
+        for name, content in files.items():
+            (output_dir / name).write_text(content)
+        print(f"Generated {count} icons in {len(files)} data files")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("archive", type=Path, help="Source ZIP from https://github.com/microsoft/fluentui-system-icons")
-    parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parents[1] / "src")
+    parser.add_argument("--output-dir", type=Path, default=Path(__file__).resolve().parents[1] / "src/data")
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
     generate(args.archive, args.output_dir, args.check)
